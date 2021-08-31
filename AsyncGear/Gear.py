@@ -127,7 +127,7 @@ class _Gear:
             await asyncio.sleep(0)
             self._period_change_event.clear()
 
-        asyncio.create_task(flash_period_change_event())#todo 暂时没有事件循环的测试
+        asyncio.create_task(flash_period_change_event())  # todo 暂时没有事件循环的测试
 
         p = self.periods[period_name]
         p.slots_num_for_true = slot_num
@@ -235,20 +235,20 @@ class _Gear:
         :return:
         '''
         await asyncio.create_task(self._unlocked.wait())
-    # def when_enter(self, period_name: str, queue_blocking='abandon'):
-    #     return run_when_enter(self.obj, period_name, queue_blocking)
-    #
-    # def when_exit(self, period_name: str, queue_blocking='abandon'):
-    #     return run_when_exit(self.obj, period_name, queue_blocking)
-    #
-    # def when_inside(self, period_name: str, queue_blocking='abandon'):
-    #     return run_when_inside(self.obj, period_name, queue_blocking)
-    #
-    # def when_outside(self, period_name: str, queue_blocking='abandon'):
-    #     return run_when_outside(self.obj, period_name, queue_blocking)
 
 
-def Gear(obj) -> _Gear:
+class _LightGear:
+    def __init__(self, obj):
+        self.obj = obj
+        self._unlocked = asyncio.Event()
+        self._unlocked.set()
+        self.assistant_tasks = []
+        self.prev_period = None
+        self._current_period: str = None
+        self._period_change_event = asyncio.Event()
+
+
+def Gear(obj) -> _LightGear:
     if obj not in gears.keys():
         gears[obj] = _Gear(obj)
     return gears[obj]
