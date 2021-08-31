@@ -123,11 +123,11 @@ class _Gear:
 
     def _set_period(self, period_name: str, slot_num: int = 1):
         async def flash_period_change_event():
-            self._period_change_event.set()
+            self._period_change_event.set()  # todo 类用例 文档
             await asyncio.sleep(0)
             self._period_change_event.clear()
 
-        asyncio.create_task(flash_period_change_event())
+        asyncio.create_task(flash_period_change_event())#todo 暂时没有事件循环的测试
 
         p = self.periods[period_name]
         p.slots_num_for_true = slot_num
