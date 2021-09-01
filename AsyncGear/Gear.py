@@ -3,6 +3,8 @@ Transfer an object to its gear, as an interface.
 '''
 import asyncio
 import datetime
+from copy import deepcopy
+
 from ensureTaskCanceled import ensureTaskCanceled
 from loguru import logger
 
@@ -149,9 +151,44 @@ class _LightGear:
         await asyncio.create_task(self._unlocked.wait())
 
 
+class _DataShine(_LightGear):
+    def __init__(self, obj):
+        super(_DataShine, self).__init__(obj)
+        self._data_container = None
+
+    async def push_data(self, data):
+        '''
+        Set the gear to carry a data to be taken, and shine the data to notify monitors new data coming.
+
+        :param data:
+        :return:
+        '''
+        self._data_container = data
+
+        self._period_change_event.clear()
+        self._period_change_event.set()
+        self._period_change_event.clear()
+        await asyncio.sleep(0)
+
+    async def wait_data_shine(self):
+        '''
+        Wait the shined data.
+
+        :return:
+        '''
+        await self._period_change_event.wait()
+        return deepcopy(self._data_container)
+
+
 def Gear(obj) -> _LightGear:
     if obj not in gears.keys():
         gears[obj] = _LightGear(obj)
+    return gears[obj]
+
+
+def DataShine(obj) -> _DataShine:
+    if obj not in gears.keys():
+        gears[obj] = _DataShine(obj)
     return gears[obj]
 
 
