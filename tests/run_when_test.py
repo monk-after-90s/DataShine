@@ -1,9 +1,4 @@
 import asyncio
-
-import uvloop
-
-asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
-
 from asyncUnittest import AsyncTestCase
 import asyncUnittest
 from AsyncGear import run_when_inside, run_when_exit, run_when_enter, run_when_outside
@@ -12,10 +7,6 @@ from AsyncGear import Gear
 
 
 class TestRunWhen(AsyncTestCase):
-    async def setUp(self) -> None:
-        Gear(self).add_periods('sleep', 'awaken')
-        self.assertEqual('sleep', Gear(self).get_present_period())
-
     async def test_multi_callback(self):
         var1 = False
 
@@ -183,6 +174,7 @@ class TestRunWhen(AsyncTestCase):
     async def test_run_when_exit(self):
         # normal function, simple test
         var = False
+        await asyncio.create_task(Gear(self).set_period('sleep'))
 
         @run_when_exit(self, 'sleep')
         def exit_test():
@@ -379,40 +371,7 @@ class TestRunWhen(AsyncTestCase):
 
 
 if __name__ == '__main__':
-    asyncUnittest.run()
+    import uvloop
 
-    # async def main():
-    #     AsyncGear.create_obj_periods('obj', 'sleep', 'awaken')
-    #     assert 'sleep' == AsyncGear.get_obj_present_period('obj')
-    #
-    #     async def delay_set_period(seconds, period_name):
-    #         await asyncio.sleep(seconds)
-    #         AsyncGear.set_obj_period('obj', period_name)
-    #
-    #     asyncio.create_task(delay_set_period(1, 'awaken'))
-    #     await AsyncGear.wait_enter_period('obj', 'awaken')
-    #     assert 'awaken' == AsyncGear.get_obj_present_period('obj')
-    #     print('Over')
-    #
-    #     loop.stop()
-    #
-    #
-    # async def main2():
-    #     AsyncGear.create_obj_periods('obj', 'sleep', 'awaken')
-    #     assert 'sleep' == AsyncGear.get_obj_present_period('obj')
-    #
-    #     async def wait_period(period_name):
-    #         await AsyncGear.wait_enter_period('obj', period_name)
-    #         print('Over')
-    #         loop.stop()
-    #
-    #     asyncio.create_task(wait_period('awaken'))
-    #
-    #     await asyncio.sleep(0)
-    #     AsyncGear.set_obj_period('obj', 'awaken')
-    #     assert 'awaken' == AsyncGear.get_obj_present_period('obj')
-    #
-    #
-    # loop = asyncio.get_event_loop()
-    # loop.create_task(main2())
-    # loop.run_forever()
+    asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
+    asyncUnittest.run()

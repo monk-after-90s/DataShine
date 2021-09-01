@@ -59,6 +59,7 @@ class _LightGear:
         return self.periods
 
     async def set_period(self, period_name: str):
+        await asyncio.sleep(0)
         if self._unlocked.is_set():
             if self.get_present_period() == period_name:
                 raise ValueError('The period_name to be set is already set.')
