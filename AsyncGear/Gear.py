@@ -57,6 +57,8 @@ class _LightGear:
 
     def set_period(self, period_name: str):
         if self._unlocked.is_set():
+            if self.get_present_period() == period_name:
+                raise ValueError('The period_name to be set is already set.')
             if period_name in self.periods:
                 self.periods.remove(period_name)
             self.periods.append(period_name)
