@@ -4,6 +4,7 @@ Transfer an object to its gear, as an interface.
 import asyncio
 import datetime
 from ensureTaskCanceled import ensureTaskCanceled
+from loguru import logger
 
 gears = {}
 
@@ -55,7 +56,7 @@ class _LightGear:
         '''
         return self.periods
 
-    def set_period(self, period_name: str):
+    async def set_period(self, period_name: str):
         if self._unlocked.is_set():
             if self.get_present_period() == period_name:
                 raise ValueError('The period_name to be set is already set.')
@@ -63,9 +64,11 @@ class _LightGear:
                 self.periods.remove(period_name)
             self.periods.append(period_name)
             self._last_set_time = datetime.datetime.now()
+            logger.debug(f'Gear({repr(self.obj)}) is set to period {period_name}')
             self._period_change_event.clear()
             self._period_change_event.set()
             self._period_change_event.clear()
+            await asyncio.sleep(0)
         else:
             raise PermissionError('The gear is locked.')
 
