@@ -13,12 +13,10 @@ def _when_ins(time_method: str, period_name: str, queue_blocking='abandon'):
     '''
 
     def decorator(f):
-        call_backs[getattr(f, '__func__', f) if type(f) is classmethod else f] = \
-            call_backs.get(getattr(f, '__func__', f) if type(f) is classmethod else f, {})
-        call_backs[getattr(f, '__func__', f) if type(f) is classmethod else f][period_name] = \
-            call_backs[getattr(f, '__func__', f) if type(f) is classmethod else f].get(period_name, {})
-        call_backs[getattr(f, '__func__', f) if type(f) is classmethod else f][period_name][time_method] = \
-            queue_blocking
+        call_back = getattr(f, '__func__', f) if type(f) is classmethod else f
+        call_backs[call_back] = call_backs.get(call_back, {})
+        call_backs[call_back][period_name] = call_backs[call_back].get(period_name, {})
+        call_backs[call_back][period_name][time_method] = queue_blocking
         return f
 
     return decorator
