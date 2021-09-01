@@ -1,5 +1,10 @@
 import asyncio
+import sys
 
+from loguru import logger
+
+logger.remove()
+logger.add(sys.stderr, level="INFO")
 import asyncUnittest
 from Gear_test import TestGear
 from Datashine_test import TestDataShine
