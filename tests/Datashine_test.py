@@ -1,8 +1,8 @@
 import asyncio
-from AsyncGear import DataShine
+from DataShine import DataShine
 import asyncUnittest
 from asyncUnittest import AsyncTestCase
-from AsyncGear.Gear import gears
+from DataShine.Gear import gears
 
 
 class TestDataShine(AsyncTestCase):

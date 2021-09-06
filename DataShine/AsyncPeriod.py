@@ -98,7 +98,7 @@ class AsyncPeriod:
     #     if obj not in cls.obj_has_async_exclusive_periods.keys():
     #         cls.obj_has_async_exclusive_periods[obj] = cls.obj_has_async_exclusive_periods.get(obj, {})
     #         for period_name in period_names:
-    #             cls.obj_has_async_exclusive_periods[obj][period_name] = AsyncGear(period_name, obj)
+    #             cls.obj_has_async_exclusive_periods[obj][period_name] = DataShine(period_name, obj)
     #         cls._set_obj_period(obj, period_names[0])
     #     else:
     #         raise KeyError(f'{repr(obj)} has already got some periods! Please use add_period.')
@@ -113,7 +113,7 @@ class AsyncPeriod:
     #     if obj not in cls.obj_has_async_exclusive_periods.keys():
     #         cls.create_obj_periods(obj, new_period_name)
     #     else:
-    #         cls.obj_has_async_exclusive_periods[obj][new_period_name] = AsyncGear(new_period_name, obj)
+    #         cls.obj_has_async_exclusive_periods[obj][new_period_name] = DataShine(new_period_name, obj)
     #
     # @classmethod
     # def _get_obj_period(cls, obj, period_name: str):
@@ -134,7 +134,7 @@ class AsyncPeriod:
     #     if obj in cls.obj_has_async_exclusive_periods.keys():
     #         return cls.obj_has_async_exclusive_periods[obj].keys()
     #     else:
-    #         raise KeyError(f'You did not create any AsyncGear for {repr(obj)}!')
+    #         raise KeyError(f'You did not create any DataShine for {repr(obj)}!')
     #
     # @classmethod
     # def _get_obj_periods(cls, obj):
@@ -160,7 +160,7 @@ class AsyncPeriod:
     #     :param obj:
     #     :param period_name:
     #     :param slot_num: Attention! Do not use it if you do not understand it!
-    #             slot_num means that only after slot_num times AsyncGear.set_obj_period(obj,period_name,slot_num) run
+    #             slot_num means that only after slot_num times DataShine.set_obj_period(obj,period_name,slot_num) run
     #             (present time included), the period of obj gear could really be set to period_name, which is interrupted
     #             if among these times set_obj_period run a different slot_num is given. Then the procedure is refreshed.
     #     :return:
@@ -171,10 +171,10 @@ class AsyncPeriod:
     #
     #     # cls._set_obj_period(obj, period_name)
     #     # if cls.get_obj_present_period(obj) != period_name:
-    #     #     await asyncio.create_task(AsyncGear.wait_outside_period(obj, period_name))
+    #     #     await asyncio.create_task(DataShine.wait_outside_period(obj, period_name))
     #     # else:
-    #     #     await asyncio.create_task(AsyncGear.wait_inside_period(obj, period_name))
-    #     # await asyncio.create_task(AsyncGear.wait_inside_period(obj, period_name))
+    #     #     await asyncio.create_task(DataShine.wait_inside_period(obj, period_name))
+    #     # await asyncio.create_task(DataShine.wait_inside_period(obj, period_name))
     #
     # @classmethod
     # async def wait_inside_period(cls, obj, period_name: str):
