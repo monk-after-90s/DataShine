@@ -23,10 +23,12 @@ class TestDataShine(AsyncTestCase):
             nums = set()
             while True:
                 new_data = await DataShine(self).wait_data_shine()
+                self.assertEqual(new_data, DataShine(self).data)
                 if new_data % 3 == remainder:
                     nums.add(new_data)
                 if new_data == 3 * n:
                     break
+                self.assertEqual(new_data, DataShine(self).data)
 
             return nums
 
@@ -41,7 +43,7 @@ class TestDataShine(AsyncTestCase):
 
 
 if __name__ == '__main__':
-    import uvloop
-
-    asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
+    # import uvloop
+    #
+    # asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
     asyncUnittest.run()

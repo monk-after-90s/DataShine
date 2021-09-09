@@ -171,6 +171,10 @@ class _DataShine(_LightGear):
         self._period_change_event.clear()
         await asyncio.sleep(0)
 
+    @property
+    def data(self):
+        return self._data_container
+
     async def wait_data_shine(self):
         '''
         Wait the shined data.
