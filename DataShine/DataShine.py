@@ -11,7 +11,7 @@ class DataShine:
 
     async def push_data(self, data):
         '''
-        Set the gear to carry a data to be taken, and shine the data to notify monitors new data coming.
+        Set the lamp to carry a data to be taken, and shine the data to notify monitors new data coming.
 
         :param data:
         :return:
@@ -25,6 +25,11 @@ class DataShine:
 
     @property
     def data(self):
+        '''
+        Query the data last pushed.
+
+        :return:
+        '''
         return self._data_container
 
     async def wait_data_shine(self):
