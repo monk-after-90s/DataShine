@@ -1,3 +1,3 @@
-from .Gear import DataShine
+from .DataShine import DataShine
 
 __all__ = [DataShine]

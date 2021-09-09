@@ -2,33 +2,27 @@ import asyncio
 from DataShine import DataShine
 import asyncUnittest
 from asyncUnittest import AsyncTestCase
-from DataShine.Gear import gears
 
 
 class TestDataShine(AsyncTestCase):
-    async def test_delete(self):
-        ds = DataShine(self)
-        self.assertIs(ds, gears[self])
-        ds.delete()
-        self.assertNotIn(self, gears.keys())
-
     async def test_data_multi_distribution(self):
         n = 4000
+        ds = DataShine()
 
         async def shine():
             for i in range(n * 3):
-                await DataShine(self).push_data(i + 1)
+                await ds.push_data(i + 1)
 
         async def period_change_remainder_waiter(remainder: int):
             nums = set()
             while True:
-                new_data = await DataShine(self).wait_data_shine()
-                self.assertEqual(new_data, DataShine(self).data)
+                new_data = await ds.wait_data_shine()
+                self.assertEqual(new_data, ds.data)
                 if new_data % 3 == remainder:
                     nums.add(new_data)
                 if new_data == 3 * n:
                     break
-                self.assertEqual(new_data, DataShine(self).data)
+                self.assertEqual(new_data, ds.data)
 
             return nums
 
@@ -43,7 +37,7 @@ class TestDataShine(AsyncTestCase):
 
 
 if __name__ == '__main__':
-    # import uvloop
-    #
-    # asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
+    import uvloop
+
+    asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
     asyncUnittest.run()
