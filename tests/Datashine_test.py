@@ -5,8 +5,47 @@ from asyncUnittest import AsyncTestCase
 
 
 class TestDataShine(AsyncTestCase):
+    async def test_simple_usage(self):
+        ds = DataShine()
+
+        async def push_loop():
+            n = 0
+            while n < 10:
+                await ds.push_data(n)
+                n += 1
+                await asyncio.sleep(0.1)
+
+        asyncio.create_task(push_loop())
+
+        data_set = []
+
+        async def waiter():
+            while True:
+                data_set.append(await ds.wait_data_shine())
+                self.assertEqual(data_set[-1], ds.data)
+
+        await asyncio.wait([waiter()], timeout=1)
+        self.assertEqual(data_set, [i for i in range(10)])
+
+    async def test_closed(self):
+        ds = DataShine()
+        await ds.close()
+        error_waited = False
+        try:
+            await ds.push_data('')
+        except RuntimeError:
+            error_waited = True
+        self.assertTrue(error_waited)
+
+        error_waited = False
+        try:
+            await ds.wait_data_shine()
+        except RuntimeError:
+            error_waited = True
+        self.assertTrue(error_waited)
+
     async def test_data_multi_distribution(self):
-        n = 4000
+        n = 10
         ds = DataShine()
 
         async def shine():
@@ -34,6 +73,24 @@ class TestDataShine(AsyncTestCase):
         self.assertEqual(await two_period_remainder_waiter_1_task, set(i for i in range(1, 3 * n + 1, 3)))
         self.assertEqual(await two_period_remainder_waiter_2_task, set(i for i in range(2, 3 * n + 1, 3)))
         self.assertEqual(await two_period_remainder_waiter_3_task, set(i for i in range(3, 3 * n + 1, 3)))
+
+    async def test_compressed_push_data(self):
+        ds = DataShine()
+
+        async def push_loop():
+            for i in range(10):
+                asyncio.create_task(ds.push_data(i))
+
+        asyncio.create_task(push_loop())
+
+        data_set = set()
+
+        async def waiter():
+            while True:
+                data_set.add(await ds.wait_data_shine())
+
+        await asyncio.wait([waiter()], timeout=1)
+        self.assertEqual(data_set, {i for i in range(10)})
 
 
 if __name__ == '__main__':
